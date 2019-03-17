@@ -1,1 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Suixin Math</title>
 
+<script language="javascript">
+//生成从minNum到maxNum的随机数
+function randomNum(minNum,maxNum){ 
+    switch(arguments.length){ 
+        case 1: 
+            return parseInt(Math.random()*minNum+1,10); 
+        break; 
+        case 2: 
+            return parseInt(Math.random()*(maxNum-minNum+1)+minNum,10); 
+        break; 
+            default: 
+                return 0; 
+            break; 
+    } 
+}
+
+function generateOperate()
+{
+  var num = randomNum(0,100);
+  
+  if(num<50)
+  {
+    return "+";
+  }
+  else
+  {
+    return "-";
+  
+  }
+
+}
+
+
+
+function generateMathProblem()
+{
+
+  var problemCount = document.getElementById("problemCount");
+  
+  problemCount.innerHTML = parseInt(problemCount.innerHTML)+1;
+
+
+  var operate = document.getElementById("operate");
+  
+  operate.value = generateOperate();
+  
+  var num1, num2, numtemp;
+  
+  num1 = randomNum(0,100);
+  
+  num2 = randomNum(0,100);
+  
+  if(operate.value=="-"&&num1<num2)
+  {
+    numtemp = num1;
+	
+	num1 = num2;
+	
+	num2 = numtemp;
+  
+  }
+  
+
+  var num = document.getElementById("num1");
+
+  num.value = num1;
+  
+  num = document.getElementById("num2");
+  
+  num.value = num2;  
+
+
+}
+
+function checkReult()
+{
+  var expresion = "";
+
+  var num = document.getElementById("num1");
+  
+  expresion += num.value;
+  
+  num = document.getElementById("operate");
+  
+  expresion += num.value;
+
+  num = document.getElementById("num2");
+  
+  expresion += num.value;
+  
+  num = document.getElementById("result");
+  if(eval(expresion)==num.value)
+  {
+    alert("做对了，再做一个！");
+	
+    var num = document.getElementById("result");
+	
+	num.value = "";
+
+		
+	generateMathProblem();
+
+  }
+  else
+  {
+  
+    alert("做错了,检查一下！");
+	
+    var num = document.getElementById("result");
+	
+	num.value = "";
+    
+  }
+  
+  return false;
+}
+
+</script>
+</head>
+
+<body onload="generateMathProblem()">
+
+<div id="mathform">
+<div>第<span id="problemCount">1</span>个问题：</div>
+<form name="form1" action="">
+<div id="mathproblem">
+<input id="num1" name="num1" type="text" value="" size="5" readonly="true" />
+<input id="operate" name="orperate" type="text" size="1" readonly="true" value=""/>
+<input id="num2" name="num2" type="text" size="5" readonly="true" value="" />
+=
+<input id="result" name="result" value="" />
+<input id="submit" name="submit" type="submit" value="提交" onclick="return checkReult()" />
+</div>
+</form>
+</div>
+</body>
+</html>
