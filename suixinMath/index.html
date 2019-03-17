@@ -7,7 +7,7 @@
 <title>Suixin Math</title>
 
 <script language="javascript">
-//生成从minNum到maxNum的随机数
+
 function randomNum(minNum,maxNum){ 
     switch(arguments.length){ 
         case 1: 
@@ -156,15 +156,15 @@ text-align:center;
 </head>
 
 <body onload="generateMathProblem()">
-
+<div><img src="mathpic.png" height="50px" /></div>
 <div id="mathform">
 <div>第<span id="problemCount">0</span>个问题：</div>
 <br /><br />
 <form name="form1" action="">
 <div id="mathproblem">
-<input class="num" id="num1" name="num1" type="text" value="" size="3" readonly="true" />
+<input class="num" id="num1" name="num1" type="text" value="" size="5" readonly="true" />
 <input class="num" id="operate" name="orperate" type="text" size="1" readonly="true" value=""/>
-<input class="num" id="num2" name="num2" type="text" size="3" readonly="true" value="" />
+<input class="num" id="num2" name="num2" type="text" size="5" readonly="true" value="" />
 <br /><br />=
 <input class="num" id="result" name="result" size="6" value="" />
 <br /><br />
