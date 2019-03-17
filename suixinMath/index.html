@@ -107,6 +107,9 @@ function checkReult()
 
 		
 	generateMathProblem();
+	
+	num.focus();
+
 
   }
   else
@@ -117,6 +120,8 @@ function checkReult()
     var num = document.getElementById("result");
 	
 	num.value = "";
+	
+	num.focus();
     
   }
   
@@ -153,7 +158,7 @@ text-align:center;
 <body onload="generateMathProblem()">
 
 <div id="mathform">
-<div>第<span id="problemCount">0</span>个问题：</div>
+<div>第<span id="problemCount">1</span>个问题：</div>
 <br /><br />
 <form name="form1" action="">
 <div id="mathproblem">
