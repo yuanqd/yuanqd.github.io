@@ -2,9 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-	
+
 <title>Suixin Math</title>
 
 <script language="javascript">
@@ -125,6 +124,22 @@ function checkReult()
 }
 
 </script>
+
+<style type="text/css">
+
+.num{
+border:0;
+
+border-bottom:2px;
+
+border-bottom-style:solid;
+
+border-bottom-color:black;
+
+text-align:center;
+}
+
+</style>
 </head>
 
 <body onload="generateMathProblem()">
@@ -133,11 +148,12 @@ function checkReult()
 <div>第<span id="problemCount">1</span>个问题：</div>
 <form name="form1" action="">
 <div id="mathproblem">
-<input id="num1" name="num1" type="text" value="" size="5" readonly="true" />
-<input id="operate" name="orperate" type="text" size="1" readonly="true" value=""/>
-<input id="num2" name="num2" type="text" size="5" readonly="true" value="" />
-=
-<input id="result" name="result" value="" />
+<input class="num" id="num1" name="num1" type="text" value="" size="5" readonly="true" />
+<input class="num" id="operate" name="orperate" type="text" size="1" readonly="true" value=""/>
+<input class="num" id="num2" name="num2" type="text" size="5" readonly="true" value="" />
+<br /><br />=
+<input class="num" id="result" name="result" size="6" value="" />
+<br /><br />
 <input id="submit" name="submit" type="submit" value="提交" onclick="return checkReult()" />
 </div>
 </form>
