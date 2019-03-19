@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+
+<script language="javascript">
+//生成从minNum到maxNum的随机数
+function randomNum(minNum,maxNum){ 
+    switch(arguments.length){ 
+        case 1: 
+            return parseInt(Math.random()*minNum+1,10); 
+        break; 
+        case 2: 
+            return parseInt(Math.random()*(maxNum-minNum+1)+minNum,10); 
+        break; 
+            default: 
+                return 0; 
+            break; 
+    } 
+}
+
+function generateOperate()
+{
+  var num = randomNum(0,100);
+  
+  if(num<50)
+  {
+    return "+";
+  }
+  else
+  {
+    return "-";
+  
+  }
+
+}
+
+
+
+function generateMathProblem()
+{
+
+  var problemCount = document.getElementById("problemCount");
+  
+  problemCount.innerHTML = parseInt(problemCount.innerHTML)+1;
+  
+
+  var operate = document.getElementById("operate");
+  
+  operate.value = generateOperate();
+  
+  var num1, num2, numtemp;
+  
+  num1 = randomNum(0,100);
+  
+  num2 = randomNum(0,100);
+  
+  if(operate.value=="-"&&num1<num2)
+  {
+    numtemp = num1;
+	
+	num1 = num2;
+	
+	num2 = numtemp;
+  
+  }
+  
+
+  var num = document.getElementById("num1");
+
+  num.value = num1;
+  
+  num = document.getElementById("num2");
+  
+  num.value = num2;  
+
+
+}
+
+function checkReult()
+{
+  var expresion = "";
+
+  var num = document.getElementById("num1");
+  
+  expresion += num.value;
+  
+  num = document.getElementById("operate");
+  
+  expresion += num.value;
+
+  num = document.getElementById("num2");
+  
+  expresion += num.value;
+  
+  num = document.getElementById("result");
+  
+  var showInf = document.getElementById("showInf");
+  
+  var useCount = document.getElementById("useCount");
+  
+  useCount.innerHTML = parseInt(useCount.innerHTML)+1;
+  
+  if(eval(expresion)==num.value)
+  {
+    showInf.innerHTML= "&radic; 再做一个！";
+	   
+  
+    if((parseInt(useCount.innerHTML)%2)==1)
+    {
+      showInf.style= "background-color:green;color:white;";
+    }
+    else
+    {
+      showInf.style= "background-color:blue;color:white;";
+    }
+
+	
+    var num = document.getElementById("result");
+	
+	num.value = "";
+
+		
+	generateMathProblem();
+	
+	num.focus();
+
+
+  }
+  else
+  {
+  
+    showInf.innerHTML= "&times; 再检查下！";
+	
+	if((parseInt(useCount.innerHTML)%2)==1)
+    {
+      showInf.style= "background-color:red;color:white;";
+    }
+    else
+    {
+      showInf.style= "background-color:yellow;color:blue;";
+    }
+	
+
+	
+    var num = document.getElementById("result");
+	
+	num.value = "";
+	
+	num.focus();
+    
+  }
+  
+
+  
+  return false;
+}
+
+</script>
+
+<style type="text/css">
+
+div{
+font-size:28px;
+}
+
+input{
+font-size:28px;
+}
+
+.num{
+border:0;
+
+border-bottom:2px;
+
+border-bottom-style:solid;
+
+border-bottom-color:black;
+
+text-align:center;
+}
+
+</style>
+
+<title>suixin mathematics exercises</title>
+</head>
+
+<body onload="generateMathProblem()">
+<div id="mathform">
+<div>第<span id="problemCount">0</span>个问题：<span id="useCount" style="display:none">0</span></div>
+<br />
+<form name="form1" action="">
+<div id="mathproblem">
+<input class="num" id="num1" name="num1" type="text" value="" size="3" readonly="true" />
+<input class="num" id="operate" name="orperate" type="text" size="1" readonly="true" value=""/>
+<input class="num" id="num2" name="num2" type="text" size="3" readonly="true" value="" />
+<br /><br />=
+<input class="num" id="result" name="result" size="4" value="" />
+<br /><br />
+<input id="submit" name="submit" type="submit" value="提交" onclick="return checkReult()" />&nbsp;&nbsp;<span id="showInf" style="background-color:blue;color:white;">请开始答题</span>
+</div>
+</form>
+</div>
+
+<br /><br /><br />
+<img src="mathpic.png" height="100px" /><br /><br />
+
+
+<div style="display:none"><script src="https://s13.cnzz.com/z_stat.php?id=5808247&web_id=5808247" language="JavaScript"></script></div>
+</body>
+</html>
