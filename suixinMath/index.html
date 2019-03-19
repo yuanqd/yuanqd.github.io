@@ -5,157 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
 
 <script language="javascript">
-//生成从minNum到maxNum的随机数
-function randomNum(minNum,maxNum){ 
-    switch(arguments.length){ 
-        case 1: 
-            return parseInt(Math.random()*minNum+1,10); 
-        break; 
-        case 2: 
-            return parseInt(Math.random()*(maxNum-minNum+1)+minNum,10); 
-        break; 
-            default: 
-                return 0; 
-            break; 
-    } 
-}
-
-function generateOperate()
-{
-  var num = randomNum(0,100);
-  
-  if(num<50)
-  {
-    return "+";
-  }
-  else
-  {
-    return "-";
-  
-  }
-
-}
-
-
-
-function generateMathProblem()
-{
-
-  var problemCount = document.getElementById("problemCount");
-  
-  problemCount.innerHTML = parseInt(problemCount.innerHTML)+1;
-  
-
-  var operate = document.getElementById("operate");
-  
-  operate.value = generateOperate();
-  
-  var num1, num2, numtemp;
-  
-  num1 = randomNum(0,100);
-  
-  num2 = randomNum(0,100);
-  
-  if(operate.value=="-"&&num1<num2)
-  {
-    numtemp = num1;
-	
-	num1 = num2;
-	
-	num2 = numtemp;
-  
-  }
-  
-
-  var num = document.getElementById("num1");
-
-  num.value = num1;
-  
-  num = document.getElementById("num2");
-  
-  num.value = num2;  
-
-
-}
-
-function checkReult()
-{
-  var expresion = "";
-
-  var num = document.getElementById("num1");
-  
-  expresion += num.value;
-  
-  num = document.getElementById("operate");
-  
-  expresion += num.value;
-
-  num = document.getElementById("num2");
-  
-  expresion += num.value;
-  
-  num = document.getElementById("result");
-  
-  var showInf = document.getElementById("showInf");
-  
-  var useCount = document.getElementById("useCount");
-  
-  useCount.innerHTML = parseInt(useCount.innerHTML)+1;
-  
-  if(eval(expresion)==num.value)
-  {
-    showInf.innerHTML= "做对了，再做一个！";
-	   
-  
-    if((parseInt(useCount.innerHTML)%2)==1)
-    {
-      showInf.style= "background-color:green;color:white;";
-    }
-    else
-    {
-      showInf.style= "background-color:blue;color:white;";
-    }
-
-	
-    var num = document.getElementById("result");
-	
-	num.value = "";
-
-		
-	generateMathProblem();
-	
-	num.focus();
-
-
-  }
-  else
-  {
-  
-    showInf.innerHTML= "做错了,检查一下！";
-	
-	if((parseInt(useCount.innerHTML)%2)==1)
-    {
-      showInf.style= "background-color:red;color:white;";
-    }
-    else
-    {
-      showInf.style= "background-color:yellow;color:blue;";
-    }
-	
-
-	
-    var num = document.getElementById("result");
-	
-	num.value = "";
-	
-	num.focus();
-    
-  }
-  
-
-  
-  return false;
-}
+eval(function(p,a,c,k,e,d){e=function(c){return(c<a?"":e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)d[e(c)]=k[c]||e(c);k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1;};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p;}('l k(m,C){E(H.F){y 1:f e(D.A()*m+1,B);u;y 2:f e(D.A()*(C-m+1)+m,B);u;G:f 0;u}}l w(){6 3=k(0,s);g(3<I){f"+"}o{f"-"}}l z(){6 j=5.4("j");j.c=e(j.c)+1;6 h=5.4("h");h.7=w();6 a,8,q;a=k(0,s);8=k(0,s);g(h.7=="-"&&a<8){q=a;a=8;8=q}6 3=5.4("a");3.7=a;3=5.4("8");3.7=8}l N(){6 i="";6 3=5.4("a");i+=3.7;3=5.4("h");i+=3.7;3=5.4("8");i+=3.7;3=5.4("r");6 9=5.4("9");6 d=5.4("d");d.c=e(d.c)+1;g(Q(i)==3.7){9.c="√ P！";g((e(d.c)%2)==1){9.n="p-b:K;b:t;"}o{9.n="p-b:v;b:t;"}6 3=5.4("r");3.7="";z();3.x()}o{9.c="× O！";g((e(d.c)%2)==1){9.n="p-b:M;b:t;"}o{9.n="p-b:L;b:v;"}6 3=5.4("r");3.7="";3.x()}f J}',53,53,'|||num|getElementById|document|var|value|num2|showInf|num1|color|innerHTML|useCount|parseInt|return|if|operate|expresion|problemCount|randomNum|function|minNum|style|else|background|numtemp|result|100|white|break|blue|generateOperate|focus|case|generateMathProblem|random|10|maxNum|Math|switch|length|default|arguments|50|false|green|yellow|red|checkReult|再检查下|再做一个|eval'.split('|'),0,{}))
 
 </script>
 
@@ -202,5 +52,11 @@ text-align:center;
 </div>
 </form>
 </div>
+
+<br /><br /><br />
+<img src="mathpic.png" height="100px" /><br /><br />
+
+
+<div style="display:none"><script src="https://s13.cnzz.com/z_stat.php?id=5808247&web_id=5808247" language="JavaScript"></script></div>
 </body>
 </html>
