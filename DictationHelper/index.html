@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -8,123 +7,8 @@
 <title>suixin dictation helper</title>
 
 <script type="text/javascript"> 
-		
-function getDictationContentJSON()
-{
-	var dictationContent = document.getElementById('dictationContent').value;
-	
-	for(var i=0;i<5;i++)
-	{dictationContent = dictationContent.replace("\n\n","\n");}
-		  
-	var content = dictationContent.split("\n");
-		  
-	var jsonContent = '{"words":[';
-		  
-	jsonContent += '{"word":"听写开始"},';
-		  
-	for(var i=0;i<content.length;i++)
-	{
-	  jsonContent += '{"word":"'+content[i]+'"},';			
-	}	  
+eval(function(p,a,c,k,e,d){e=function(c){return(c<a?"":e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)d[e(c)]=k[c]||e(c);k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1;};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p;}('m A(){1 e=4.2(\'e\').d;H(1 i=0;i<5;i++){e=e.O("\\n\\n","\\n")}1 v=e.T("\\n");1 a=\'{"f":[\';a+=\'{"c":"U"},\';H(1 i=0;i<v.u;i++){a+=\'{"c":"\'+v[i]+\'"},\'}a+=\'{"c":"V"}\';a+=\']}\';S a}m P(){1 7=4.2("7");7.k="z-j:Q;j:J;";1 b=4.2("b");b.r="R：";1 6=4.2("6");6.k="l:0;l-t:W;l-t-k:11;l-t-j:12;G-13:10;";1 C=A();1 g=X.Y(C);1 i=0;1 p=3;1 h=p;1 D=Z(m(){B(i<g.f.u&&h>0){4.2(\'6\').d=g.f[i].c;x();h--}I B(i<g.f.u&&h<=0){i++;h=p;4.2(\'6\').d=g.f[i].c;x()}I{1 7=4.2("7");7.k="z-j:1m;j:J;";1 b=4.2("b");b.r="1n";1 6=4.2("6");6.d="";6.k="1o:1l;";1i(D)}},1j)}m x(){1 y=4.2(\'1t\');1 o=4.2(\'s\');1 6=4.2(\'6\').d;y.1u(o);1 M=\'<q w="s" E="E">\';1 N=\'<1s w="1p" F="1q://1r.18.19/1k?17=14&15=16-8&1f=9&G=\'+6+\'" 1h="q/1e">\';1 L=\'<1b w="1c" 1d="0" 1g="0" F="">\';1 K=\'</q>\';y.r=M+N+L+K;o=4.2(\'s\');o.1a()}',62,93,'|var|getElementById||document||ttsText|wordToDict|||jsonContent|inf|word|value|dictationContent|words|obj|oneWordRepeatCount||color|style|border|function||ttsAudio|oneWordRepeatTimes|audio|innerHTML|tts_autio_id|bottom|length|content|id|doTTS|ttsDiv|background|getDictationContentJSON|if|jsonstr|ref|autoplay|src|text|for|else|white|au2|eee|au1|sss|replace|dictation|green|正在听写|return|split|听写开始|听写结束|2px|JSON|parse|setInterval|center|solid|black|align|zh|ie|UTF|lan|baidu|com|play|embed|tts_embed_id|height|mpeg|spd|width|type|clearInterval|4000|text2audio|none|blue|欢迎使用听写助手|display|tts_source_id|http|tts|source|bdtts_div_id|removeChild'.split('|'),0,{}))
 
-    jsonContent += '{"word":"听写结束"}';
-	jsonContent += ']}';
-		  
-		  
-		  
-	return jsonContent;
-	}
-		
-		
-function dictation()
-{
-
-  var wordToDict = document.getElementById("wordToDict");
-  
-  wordToDict.style= "background-color:green;color:white;";
-  
-  var inf = document.getElementById("inf");
-  inf.innerHTML = "正在听写：";
-  
-  var ttsText = document.getElementById("ttsText");
-  
-  ttsText.style="border:0;border-bottom:2px;border-bottom-style:solid;border-bottom-color:black;text-align:center;";
-
-  var jsonstr = getDictationContentJSON();	
-  
-  //alert(jsonstr);
-		  
-  var obj = JSON.parse(jsonstr);
-		  
-  var i = 0;
-		  
-  var oneWordRepeatTimes = 3;
-		  		  
-  var oneWordRepeatCount = oneWordRepeatTimes;
-  
-  var ref = setInterval(function(){
-		   
-  if(i<obj.words.length&&oneWordRepeatCount>0)
-  {
- 	document.getElementById('ttsText').value= obj.words[i].word;
-	doTTS();
-	oneWordRepeatCount--;
-			  	  
-  }
-  else if(i<obj.words.length&&oneWordRepeatCount<=0)
-  {
-        
-	i++;	
-	oneWordRepeatCount = oneWordRepeatTimes;	
-			
-	document.getElementById('ttsText').value= obj.words[i].word;
-	doTTS();	
-		  
-	}
-  else
-  {
-  
-    var wordToDict = document.getElementById("wordToDict");
-  
-    wordToDict.style= "background-color:blue;color:white;";
-  
-    var inf = document.getElementById("inf");
-    inf.innerHTML = "欢迎使用听写助手";
-  
-    var ttsText = document.getElementById("ttsText");
-	
-	ttsText.value = "";
-  
-    ttsText.style="display:none;";
-	
-    clearInterval(ref);
-	
-	
-  }
-			
-  },4000);
-			 
-		  		  
-  }
-		
-function doTTS()
-{
-
-  var ttsDiv = document.getElementById('bdtts_div_id');
-  var ttsAudio = document.getElementById('tts_autio_id');
-  var ttsText = document.getElementById('ttsText').value;
-			
-  ttsDiv.removeChild(ttsAudio);
-  var au1 = '<audio id="tts_autio_id" autoplay="autoplay">';
-  var sss = '<source id="tts_source_id" src="http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=9&text='+ttsText+'" type="audio/mpeg">';
-  var eee = '<embed id="tts_embed_id" height="0" width="0" src="">';
-  var au2 = '</audio>';
-  ttsDiv.innerHTML = au1 + sss + eee + au2;
-			
-  ttsAudio = document.getElementById('tts_autio_id');
-			
-  ttsAudio.play();
-}
 </script>
 </head>
 

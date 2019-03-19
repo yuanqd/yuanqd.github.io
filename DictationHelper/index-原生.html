@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+
+<title>suixin dictation helper</title>
+
+<script type="text/javascript"> 
+		
+function getDictationContentJSON()
+{
+	var dictationContent = document.getElementById('dictationContent').value;
+	
+	for(var i=0;i<5;i++)
+	{dictationContent = dictationContent.replace("\n\n","\n");}
+		  
+	var content = dictationContent.split("\n");
+		  
+	var jsonContent = '{"words":[';
+		  
+	jsonContent += '{"word":"听写开始"},';
+		  
+	for(var i=0;i<content.length;i++)
+	{
+	  jsonContent += '{"word":"'+content[i]+'"},';			
+	}	  
+
+    jsonContent += '{"word":"听写结束"}';
+	jsonContent += ']}';
+		  
+		  
+		  
+	return jsonContent;
+	}
+		
+		
+function dictation()
+{
+
+  var wordToDict = document.getElementById("wordToDict");
+  
+  wordToDict.style= "background-color:green;color:white;";
+  
+  var inf = document.getElementById("inf");
+  inf.innerHTML = "正在听写：";
+  
+  var ttsText = document.getElementById("ttsText");
+  
+  ttsText.style="border:0;border-bottom:2px;border-bottom-style:solid;border-bottom-color:black;text-align:center;";
+
+  var jsonstr = getDictationContentJSON();	
+  
+  //alert(jsonstr);
+		  
+  var obj = JSON.parse(jsonstr);
+		  
+  var i = 0;
+		  
+  var oneWordRepeatTimes = 3;
+		  		  
+  var oneWordRepeatCount = oneWordRepeatTimes;
+  
+  var ref = setInterval(function(){
+		   
+  if(i<obj.words.length&&oneWordRepeatCount>0)
+  {
+ 	document.getElementById('ttsText').value= obj.words[i].word;
+	doTTS();
+	oneWordRepeatCount--;
+			  	  
+  }
+  else if(i<obj.words.length&&oneWordRepeatCount<=0)
+  {
+        
+	i++;	
+	oneWordRepeatCount = oneWordRepeatTimes;	
+			
+	document.getElementById('ttsText').value= obj.words[i].word;
+	doTTS();	
+		  
+	}
+  else
+  {
+  
+    var wordToDict = document.getElementById("wordToDict");
+  
+    wordToDict.style= "background-color:blue;color:white;";
+  
+    var inf = document.getElementById("inf");
+    inf.innerHTML = "欢迎使用听写助手";
+  
+    var ttsText = document.getElementById("ttsText");
+	
+	ttsText.value = "";
+  
+    ttsText.style="display:none;";
+	
+    clearInterval(ref);
+	
+	
+  }
+			
+  },4000);
+			 
+		  		  
+  }
+		
+function doTTS()
+{
+
+  var ttsDiv = document.getElementById('bdtts_div_id');
+  var ttsAudio = document.getElementById('tts_autio_id');
+  var ttsText = document.getElementById('ttsText').value;
+			
+  ttsDiv.removeChild(ttsAudio);
+  var au1 = '<audio id="tts_autio_id" autoplay="autoplay">';
+  var sss = '<source id="tts_source_id" src="http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=9&text='+ttsText+'" type="audio/mpeg">';
+  var eee = '<embed id="tts_embed_id" height="0" width="0" src="">';
+  var au2 = '</audio>';
+  ttsDiv.innerHTML = au1 + sss + eee + au2;
+			
+  ttsAudio = document.getElementById('tts_autio_id');
+			
+  ttsAudio.play();
+}
+</script>
+</head>
+
+<body>
+
+<div id="wordToDict" style="background-color:blue;color:white;"><span id="inf">欢迎使用听写助手</span><input style="display:none;" type="text" id="ttsText" value="" /></div>
+<hr />	
+<div id="bdtts_div_id">	
+<audio id="tts_autio_id" autoplay="autoplay">
+<source id="tts_source_id" src="http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=8&text=你好,欢迎使用听写助手" type="audio/mpeg">
+<embed id="tts_embed_id" height="0" width="0" src="">
+</audio>	
+</div>
+		
+<div>
+<form id="dictationContentForm" name="dictationContentForm">
+请输入听写内容<br /><br />
+<textarea rows="20" cols="10" id="dictationContent" name="dictationContent"></textarea>
+<br />
+<input type="button" id="dic" value="开始听写" onClick="dictation()" />
+</form>
+</div>
+	
+</body>
+</html>
