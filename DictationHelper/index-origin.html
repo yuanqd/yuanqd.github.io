@@ -7,23 +7,36 @@
 <title>suixin dictation helper</title>
 
 <script type="text/javascript"> 
+
+function trim(str)
+{
+ str = str.replace(/(^\s*)|(\s*$)/g, "");
+ 
+ str = str.replace(/(^\n*)|(\n*$)/g, "");
+ 
+ return str;
+}
 		
 function getDictationContentJSON()
 {
 	var dictationContent = document.getElementById('dictationContent').value;
 	
-	for(var i=0;i<5;i++)
-	{dictationContent = dictationContent.replace("\n\n","\n");}
+	dictationContent = trim(dictationContent);
+	
+	dictationContent = dictationContent.replace(/([.\n\r]+)/g,"\n");
 		  
 	var content = dictationContent.split("\n");
-		  
+			  
 	var jsonContent = '{"words":[';
 		  
-	jsonContent += '{"word":"听写开始"},';
-		  
+	jsonContent += '{"word":"听写开始"},';	
+	
 	for(var i=0;i<content.length;i++)
 	{
-	  jsonContent += '{"word":"'+content[i]+'"},';			
+	  if(content[i]!="")
+	  {
+	    jsonContent += '{"word":"'+content[i]+'"},';
+	  }			
 	}	  
 
     jsonContent += '{"word":"听写结束"}';
@@ -34,9 +47,17 @@ function getDictationContentJSON()
 	return jsonContent;
 	}
 		
+
+var intervalRef = null;
 		
 function dictation()
 {
+
+  var dictationBtn = document.getElementById("dictationBtn");
+  var stopDictationBtn = document.getElementById("stopDictationBtn");
+  
+  dictationBtn.disabled = true;
+  stopDictationBtn.disabled = false;
 
   var wordToDict = document.getElementById("wordToDict");
   
@@ -51,17 +72,17 @@ function dictation()
 
   var jsonstr = getDictationContentJSON();	
   
-  //alert(jsonstr);
-		  
   var obj = JSON.parse(jsonstr);
 		  
   var i = 0;
-		  
-  var oneWordRepeatTimes = 3;
-		  		  
+	
+
+  var oneWordRepeatTimes = parseInt(document.getElementById("repeatTimes").value);  
+  
+  		  		  
   var oneWordRepeatCount = oneWordRepeatTimes;
   
-  var ref = setInterval(function(){
+  intervalRef = setInterval(function(){
 		   
   if(i<obj.words.length&&oneWordRepeatCount>0)
   {
@@ -73,19 +94,35 @@ function dictation()
   else if(i<obj.words.length&&oneWordRepeatCount<=0)
   {
         
-	i++;	
-	oneWordRepeatCount = oneWordRepeatTimes;	
+	i++;
+	if(i<obj.words.length)	
+	{
+	
+	  oneWordRepeatCount = oneWordRepeatTimes;	
 			
-	document.getElementById('ttsText').value= obj.words[i].word;
-	doTTS();	
+  	  document.getElementById('ttsText').value= obj.words[i].word;
+	  doTTS();
+      oneWordRepeatCount--;
+	 }	
 		  
 	}
   else
-  {
+  {      
+	stopDictation();	
+  }
+			
+  },4000);			 
+		  		  
+  }
   
+function stopDictation()
+{
+
+    clearInterval(intervalRef);
+	
     var wordToDict = document.getElementById("wordToDict");
   
-    wordToDict.style= "background-color:blue;color:white;";
+    wordToDict.style= "background-color:#0033FF;color:white;";
   
     var inf = document.getElementById("inf");
     inf.innerHTML = "欢迎使用听写助手";
@@ -96,15 +133,13 @@ function dictation()
   
     ttsText.style="display:none;";
 	
-    clearInterval(ref);
-	
-	
-  }
-			
-  },4000);
-			 
-		  		  
-  }
+    var dictationBtn = document.getElementById("dictationBtn");
+    var stopDictationBtn = document.getElementById("stopDictationBtn");
+  
+    dictationBtn.disabled = false;
+    stopDictationBtn.disabled = true; 
+  
+}
 		
 function doTTS()
 {
@@ -114,9 +149,9 @@ function doTTS()
   var ttsText = document.getElementById('ttsText').value;
 			
   ttsDiv.removeChild(ttsAudio);
-  var au1 = '<audio id="tts_autio_id" autoplay="autoplay">';
-  var sss = '<source id="tts_source_id" src="http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=9&text='+ttsText+'" type="audio/mpeg">';
-  var eee = '<embed id="tts_embed_id" height="0" width="0" src="">';
+  var au1 = '<audio id="tts_autio_id" autoplay="autoplay" />';
+  var sss = '<source id="tts_source_id" src="http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&text='+ttsText+'" type="audio/mpeg" />';
+  var eee = '<embed id="tts_embed_id" height="0" width="0" src="" />';
   var au2 = '</audio>';
   ttsDiv.innerHTML = au1 + sss + eee + au2;
 			
@@ -129,23 +164,40 @@ function doTTS()
 
 <body>
 
-<div id="wordToDict" style="background-color:blue;color:white;"><span id="inf">欢迎使用听写助手</span><input style="display:none;" type="text" id="ttsText" value="" /></div>
+<div id="container" style="text-align:center">
+
+<div id="wordToDict" style="background-color:#0033FF;color:white;"><span id="inf">欢迎使用听写助手</span><input style="display:none;" type="text" id="ttsText" value="" /></div>
 <hr />	
 <div id="bdtts_div_id">	
-<audio id="tts_autio_id" autoplay="autoplay">
-<source id="tts_source_id" src="http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=8&text=你好,欢迎使用听写助手" type="audio/mpeg">
-<embed id="tts_embed_id" height="0" width="0" src="">
+<audio id="tts_autio_id" autoplay="autoplay" />
+<source id="tts_source_id" src="http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&text=你好,欢迎使用听写助手" type="audio/mpeg" />
+<embed id="tts_embed_id" height="0" width="0" src="" />
 </audio>	
 </div>
 		
 <div>
 <form id="dictationContentForm" name="dictationContentForm">
 请输入听写内容<br /><br />
-<textarea rows="20" cols="10" id="dictationContent" name="dictationContent"></textarea>
+<textarea rows="25" cols="30" id="dictationContent" name="dictationContent"></textarea>
 <br />
-<input type="button" id="dic" value="开始听写" onClick="dictation()" />
+<select id="repeatTimes"><option value="1">重复1次</option><option value="2">重复2次</option><option value="3" selected="selected">重复3次</option></select>
+
+<input type="button" id="dictationBtn" size="20" value="开始听写" onClick="dictation()" />
+
+<input type="button" id="stopDictationBtn" size="20" disabled="disabled" value="停止听写" onClick="stopDictation()" />
 </form>
 </div>
-	
+
+<div style="background-color:#0033FF;color:#CCCCCC; margin-top:5px;">
+<div style="text-align:center">使用说明</div>
+<div style="text-align:left">
+1、语文、英语均可听写；<br /><br />2、听写前先输入想听写的单词，可以让孩子自己录入，强化记忆；<br /><br />3、每个听写单元占一行，如想分别听写hello, world两个单词，那么在hello之后换行，如果想两个单词作为一个单元连读,则让这两个单词在一行即可，如果因为语句过长自然换行，目前会被作为两个单元读出，下一版本计划加以改进。
+<br /><br />
+4、听写开始和结束时，会有对应重复次数的听写开始和结束的提示，请耐心等待。
+</div>
+</div>
+
+<div style="display:none"><script src="https://s13.cnzz.com/z_stat.php?id=5808247&web_id=5808247" language="JavaScript"></script></div>
+</div>
 </body>
 </html>
