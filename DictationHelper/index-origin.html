@@ -111,6 +111,24 @@ function dictation()
 		  
    }
    
+ 
+  if(i==(obj.words.length-1)&&hintRepeatTimesCount>=0)
+  {
+    if(hintRepeatTimesCount>0)
+    {
+	  document.getElementById('ttsText').value= obj.words[i].word;
+	  doTTS();
+	  hintRepeatTimesCount--;  
+	}	
+	else
+	{
+	  stopDictation();
+	}
+  } 
+  else if(i==(obj.words.length-1)&&hintRepeatTimes==0)
+  {
+    stopDictation();
+  }
   
   
   if(i==0&&hintRepeatTimesCount>0)//必须放到上面代码之后,不然i的自增会影响上面逻辑
@@ -130,24 +148,8 @@ function dictation()
   {
     i++;
   }
-  
-  if(i==(obj.words.length-1)&&hintRepeatTimesCount>0)
-  {
-    document.getElementById('ttsText').value= obj.words[i].word;
-	doTTS();
-	hintRepeatTimesCount--;  
-	
-	if(hintRepeatTimesCount==0)
-	{
-	  stopDictation();	
-	}
-  } 
-  else if(i==(obj.words.length-1)&&hintRepeatTimes==0)
-  {
-    stopDictation();
-  }
 			
-  },4000);			 
+  },5000);			 
 		  		  
   }
   
