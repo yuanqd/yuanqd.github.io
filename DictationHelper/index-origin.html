@@ -79,23 +79,27 @@ function dictation()
 
   var oneWordRepeatTimes = parseInt(document.getElementById("repeatTimes").value);  
   
+  var hintRepeatTimes = parseInt(document.getElementById("hintRepeatTimes").value);  
   		  		  
   var oneWordRepeatCount = oneWordRepeatTimes;
   
+  var hintRepeatTimesCount =  hintRepeatTimes;
+  
   intervalRef = setInterval(function(){
+  
 		   
-  if(i<obj.words.length&&oneWordRepeatCount>0)
+  if(i>0&&i<(obj.words.length-1)&&oneWordRepeatCount>0)
   {
- 	document.getElementById('ttsText').value= obj.words[i].word;
+    document.getElementById('ttsText').value= obj.words[i].word;
 	doTTS();
 	oneWordRepeatCount--;
 			  	  
   }
-  else if(i<obj.words.length&&oneWordRepeatCount<=0)
+  else if(i>0&&i<(obj.words.length-1)&&oneWordRepeatCount<=0)
   {
         
 	i++;
-	if(i<obj.words.length)	
+	if(i<(obj.words.length-1))	
 	{
 	
 	  oneWordRepeatCount = oneWordRepeatTimes;	
@@ -105,10 +109,42 @@ function dictation()
       oneWordRepeatCount--;
 	 }	
 		  
+   }
+   
+  
+  
+  if(i==0&&hintRepeatTimesCount>0)//必须放到上面代码之后,不然i的自增会影响上面逻辑
+  {
+    document.getElementById('ttsText').value= obj.words[i].word;
+	
+	doTTS();
+	hintRepeatTimesCount--;
+	
+	if(hintRepeatTimesCount==0)
+	{
+	  i++;
+	  hintRepeatTimesCount =  hintRepeatTimes;	
+	}	
+  }
+  else if(i==0&&hintRepeatTimes==0)
+  {
+    i++;
+  }
+  
+  if(i==(obj.words.length-1)&&hintRepeatTimesCount>0)
+  {
+    document.getElementById('ttsText').value= obj.words[i].word;
+	doTTS();
+	hintRepeatTimesCount--;  
+	
+	if(hintRepeatTimesCount==0)
+	{
+	  stopDictation();	
 	}
-  else
-  {      
-	stopDictation();	
+  } 
+  else if(i==(obj.words.length-1)&&hintRepeatTimes==0)
+  {
+    stopDictation();
   }
 			
   },4000);			 
@@ -167,7 +203,7 @@ function doTTS()
 <div id="container" style="text-align:center">
 
 <div id="wordToDict" style="background-color:#0033FF;color:white;"><span id="inf">欢迎使用听写助手</span><input style="display:none;" type="text" id="ttsText" value="" /></div>
-<hr />	
+<hr style="border-color:#0033FF" />
 <div id="bdtts_div_id">	
 <audio id="tts_autio_id" autoplay="autoplay" />
 <source id="tts_source_id" src="http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&text=你好,欢迎使用听写助手" type="audio/mpeg" />
@@ -178,16 +214,21 @@ function doTTS()
 <div>
 <form id="dictationContentForm" name="dictationContentForm">
 请输入听写内容<br /><br />
-<textarea rows="25" cols="28" id="dictationContent" name="dictationContent"></textarea>
+<textarea rows="23" cols="28" id="dictationContent" name="dictationContent"></textarea>
 <br />
-<select id="repeatTimes"><option value="1">重复1次</option><option value="2">重复2次</option><option value="3" selected="selected">重复3次</option></select>
-
 <input type="button" id="dictationBtn" size="20" value="开始听写" onClick="dictation()" />
-
+&nbsp;
 <input type="button" id="stopDictationBtn" size="20" disabled="disabled" value="停止听写" onClick="stopDictation()" />
 </form>
 </div>
+<div>
+<hr style="border-color:#0033FF" />
 
+<select id="hintRepeatTimes"><option value="0">提示重复0次</option><option value="1" selected="selected">提示重复1次</option><option value="2">提示重复2次</option><option value="3">提示重复3次</option></select>&nbsp;
+
+<select id="repeatTimes"><option value="1">正文重复1次</option><option value="2">正文重复2次</option><option value="3" selected="selected">正文重复3次</option><option value="4">正文重复4次</option><option value="5">正文重复5次</option><option value="6">正文重复6次</option></select>
+
+</div>
 <div style="background-color:#0033FF;color:#CCCCCC; margin-top:5px;">
 <div style="text-align:center">使用说明</div>
 <div style="text-align:left;padding:10px;">
