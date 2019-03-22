@@ -16,6 +16,39 @@ function trim(str)
  
  return str;
 }
+
+
+function isChineseWord(str)
+{
+  if (escape(str).indexOf( "%u" )<0)
+  {
+    return false;
+  }
+  else
+  {
+    return true;
+  }
+}
+
+function dictateDuration(str)
+{
+
+  var timeLength = parseInt(document.getElementById('dictateDuration').value);
+  
+  if(timeLength==null||timeLength<3000)
+  {
+      timeLength = 3000;
+  }
+  
+  if(isChineseWord(str))
+  {
+    return 300*str.length+timeLength;
+  }
+  else
+  {
+    return 50*str.length+timeLength;
+  }
+}
 		
 function getDictationContentJSON()
 {
@@ -85,7 +118,7 @@ function dictation()
   
   var hintRepeatTimesCount =  hintRepeatTimes;
   
-  intervalRef = setInterval(function(){
+  intervalRef = setTimeout(function(){
   
 		   
   if(i>0&&i<(obj.words.length-1)&&oneWordRepeatCount>0)
@@ -93,6 +126,9 @@ function dictation()
     document.getElementById('ttsText').value= obj.words[i].word;
 	doTTS();
 	oneWordRepeatCount--;
+
+    intervalRef = setTimeout( arguments.callee, dictateDuration(obj.words[i].word) );   
+
 			  	  
   }
   else if(i>0&&i<(obj.words.length-1)&&oneWordRepeatCount<=0)
@@ -107,6 +143,8 @@ function dictation()
   	  document.getElementById('ttsText').value= obj.words[i].word;
 	  doTTS();
       oneWordRepeatCount--;
+	  
+      intervalRef = setTimeout( arguments.callee, dictateDuration(obj.words[i].word) );   	  
 	 }	
 		  
    }
@@ -118,7 +156,9 @@ function dictation()
     {
 	  document.getElementById('ttsText').value= obj.words[i].word;
 	  doTTS();
-	  hintRepeatTimesCount--;  
+	  hintRepeatTimesCount--;
+      intervalRef = setTimeout( arguments.callee, dictateDuration(obj.words[i].word) );   	  
+	    
 	}	
 	else
 	{
@@ -138,6 +178,9 @@ function dictation()
 	doTTS();
 	hintRepeatTimesCount--;
 	
+    intervalRef = setTimeout( arguments.callee, dictateDuration(obj.words[i].word) );   	  
+	
+	
 	if(hintRepeatTimesCount==0)
 	{
 	  i++;
@@ -148,15 +191,17 @@ function dictation()
   {
     i++;
   }
+  
+
 			
-  },5000);			 
+  },4000);			 
 		  		  
   }
   
 function stopDictation()
 {
 
-    clearInterval(intervalRef);
+    clearTimeout(intervalRef);
 	
     var wordToDict = document.getElementById("wordToDict");
   
@@ -230,6 +275,8 @@ function doTTS()
 
 <select id="repeatTimes"><option value="1">正文重复1次</option><option value="2">正文重复2次</option><option value="3" selected="selected">正文重复3次</option><option value="4">正文重复4次</option><option value="5">正文重复5次</option><option value="6">正文重复6次</option></select>
 
+<select id="dictateDuration"><option value="3000">间隔3秒</option><option value="5000">间隔5秒</option><option value="7000">间隔7秒</option><option value="9000">间隔9秒</option><option value="11000">间隔11秒</option></select>
+
 </div>
 <div style="background-color:#0033FF;color:#CCCCCC; margin-top:5px;">
 <div style="text-align:center">使用说明</div>
@@ -237,7 +284,7 @@ function doTTS()
 1、语文、英语均可听写；<br /><br />
 2、听写前先输入想听写的单词，可以让孩子自己录入，强化记忆；<br /><br />
 3、每个听写单元占一行，如想分别听写hello, world两个单词，那么在hello之后换行，如果想两个单词作为一个单元连读,则让这两个单词在一行即可。<br /><br />
-4、如果因为语句过长导致自然换行，目前只会读出第一行,所以建议每行不要太长,下一版本计划加以改进。
+4、语句过长很难完成听写,建议每个听写单元不要太长。
 <br /><br />
 5、听写开始和结束时，会有对应重复次数的听写开始和结束的提示，请耐心等待。
 </div>
