@@ -52,6 +52,12 @@ function dictateDuration(str)
 		
 function getDictationContentJSON()
 {
+
+	var oneWordRepeatTimes = parseInt(document.getElementById("repeatTimes").value);  
+  
+    var hintRepeatTimes = parseInt(document.getElementById("hintRepeatTimes").value);  
+
+	
 	var dictationContent = document.getElementById('dictationContent').value;
 	
 	dictationContent = trim(dictationContent);
@@ -62,17 +68,17 @@ function getDictationContentJSON()
 			  
 	var jsonContent = '{"words":[';
 		  
-	jsonContent += '{"word":"听写开始"},';	
+	jsonContent += '{"word":"听写开始","repeatTimes":"'+hintRepeatTimes+'"},';	
 	
 	for(var i=0;i<content.length;i++)
 	{
 	  if(content[i]!="")
 	  {
-	    jsonContent += '{"word":"'+content[i]+'"},';
+	    jsonContent += '{"word":"'+content[i]+'","repeatTimes":"'+oneWordRepeatTimes+'"},';
 	  }			
 	}	  
 
-    jsonContent += '{"word":"听写结束"}';
+    jsonContent += '{"word":"听写结束","repeatTimes":"'+hintRepeatTimes+'"}';
 	jsonContent += ']}';
 		  
 		  
@@ -110,20 +116,16 @@ function dictation()
   var i = 0;
 	
 
-  var oneWordRepeatTimes = parseInt(document.getElementById("repeatTimes").value);  
-  
-  var hintRepeatTimes = parseInt(document.getElementById("hintRepeatTimes").value);  
-  		  		  
-  var oneWordRepeatCount = oneWordRepeatTimes;
-  
-  var hintRepeatTimesCount =  hintRepeatTimes;
+  var oneWordRepeatCount = parseInt(obj.words[i].repeatTimes);
+
   
   intervalRef = setTimeout(function(){
   
 		   
-  if(i>0&&i<(obj.words.length-1)&&oneWordRepeatCount>0)
+  if(i<obj.words.length&&oneWordRepeatCount>0)
   {
     document.getElementById('ttsText').value= obj.words[i].word;
+
 	doTTS();
 	oneWordRepeatCount--;
 
@@ -131,68 +133,23 @@ function dictation()
 
 			  	  
   }
-  else if(i>0&&i<(obj.words.length-1)&&oneWordRepeatCount<=0)
+  else if(i<(obj.words.length-1)&&oneWordRepeatCount<=0)
   {
         
 	i++;
-	if(i<(obj.words.length-1))	
-	{
 	
-	  oneWordRepeatCount = oneWordRepeatTimes;	
+	oneWordRepeatCount = parseInt(obj.words[i].repeatTimes);
 			
-  	  document.getElementById('ttsText').value= obj.words[i].word;
-	  doTTS();
-      oneWordRepeatCount--;
-	  
-      intervalRef = setTimeout( arguments.callee, dictateDuration(obj.words[i].word) );   	  
-	 }	
-		  
-   }
-   
- 
-  if(i==(obj.words.length-1)&&hintRepeatTimesCount>=0)
-  {
-    if(hintRepeatTimesCount>0)
-    {
-	  document.getElementById('ttsText').value= obj.words[i].word;
-	  doTTS();
-	  hintRepeatTimesCount--;
-      intervalRef = setTimeout( arguments.callee, dictateDuration(obj.words[i].word) );   	  
-	    
-	}	
-	else
-	{
-	  stopDictation();
-	}
-  } 
-  else if(i==(obj.words.length-1)&&hintRepeatTimes==0)
-  {
-    stopDictation();
-  }
-  
-  
-  if(i==0&&hintRepeatTimesCount>0)//必须放到上面代码之后,不然i的自增会影响上面逻辑
-  {
-    document.getElementById('ttsText').value= obj.words[i].word;
-	
+  	document.getElementById('ttsText').value= obj.words[i].word;
 	doTTS();
-	hintRepeatTimesCount--;
-	
+    oneWordRepeatCount--;
+	  
     intervalRef = setTimeout( arguments.callee, dictateDuration(obj.words[i].word) );   	  
-	
-	
-	if(hintRepeatTimesCount==0)
-	{
-	  i++;
-	  hintRepeatTimesCount =  hintRepeatTimes;	
-	}	
-  }
-  else if(i==0&&hintRepeatTimes==0)
-  {
-    i++;
-  }
-  
-
+   }
+   else
+   {
+     stopDictation();
+   }
 			
   },4000);			 
 		  		  
@@ -278,15 +235,18 @@ function doTTS()
 <select id="dictateDuration"><option value="3000">间隔3秒</option><option value="5000">间隔5秒</option><option value="7000">间隔7秒</option><option value="9000">间隔9秒</option><option value="11000">间隔11秒</option></select>
 
 </div>
+
 <div style="background-color:#0033FF;color:#CCCCCC; margin-top:5px;">
 <div style="text-align:center">使用说明</div>
 <div style="text-align:left;padding:10px;">
-1、语文、英语均可听写；<br /><br />
-2、听写前先输入想听写的单词，可以让孩子自己录入，强化记忆；<br /><br />
+1、语文、英语均可听写。<br /><br />
+2、听写前先输入想听写的单词，可以让孩子自己录入，强化记忆。<br /><br />
 3、每个听写单元占一行，如想分别听写hello, world两个单词，那么在hello之后换行，如果想两个单词作为一个单元连读,则让这两个单词在一行即可。<br /><br />
-4、语句过长很难完成听写,建议每个听写单元不要太长。
+4、可选择听写提示，如选提示重复1次，那么在听写的开始和结束会各提示1次，其他同理。
 <br /><br />
-5、听写开始和结束时，会有对应重复次数的听写开始和结束的提示，请耐心等待。
+5、间隔时间是指两个听写单元间的间隔时间。<br /><br />
+6、经反馈，在部分iOS设备上无法正常播放声音，因为iOS不支持audio标签自动播放，在下一版本中将尝试解决该问题。
+
 </div>
 </div>
 
