@@ -121,35 +121,45 @@ function dictation()
   
   intervalRef = setTimeout(function(){
   
-		   
-  if(i<obj.words.length&&oneWordRepeatCount>0)
+  if(i<obj.words.length)
   {
-    document.getElementById('ttsText').value= obj.words[i].word;
+    if(oneWordRepeatCount>0)
+    {
+      document.getElementById('ttsText').value= obj.words[i].word;
 
-	doTTS();
-	oneWordRepeatCount--;
-
-    intervalRef = setTimeout( arguments.callee, dictateDuration(obj.words[i].word) );   
-
-			  	  
-  }
-  else if(i<(obj.words.length-1)&&oneWordRepeatCount<=0)
-  {
-        
-	i++;
-	
-	oneWordRepeatCount = parseInt(obj.words[i].repeatTimes);
-			
-  	document.getElementById('ttsText').value= obj.words[i].word;
-	doTTS();
-    oneWordRepeatCount--;
+	  doTTS();
 	  
-    intervalRef = setTimeout( arguments.callee, dictateDuration(obj.words[i].word) );   	  
+	  oneWordRepeatCount--;
+
+      intervalRef = setTimeout( arguments.callee, dictateDuration(obj.words[i].word) );     }
+	 else
+	 {
+	 
+	   i++;
+	   
+	   if(i<obj.words.length)
+	   {	   
+
+         oneWordRepeatCount = parseInt(obj.words[i].repeatTimes);
+	   
+	     oneWordRepeatCount--;
+	   
+	     if(oneWordRepeatCount>=0)
+	     {		
+		  document.getElementById('ttsText').value= obj.words[i].word;
+		
+		  doTTS();
+		 }
+		
+		 intervalRef = setTimeout( arguments.callee, dictateDuration(obj.words[i].word) );       }
+		else
+		{
+		  stopDictation();
+		}
+	 }  
    }
-   else
-   {
-     stopDictation();
-   }
+
+   
 			
   },4000);			 
 		  		  
