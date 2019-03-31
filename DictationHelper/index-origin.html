@@ -100,14 +100,14 @@ function dictation()
 
   var wordToDict = document.getElementById("wordToDict");
   
-  wordToDict.style= "background-color:green;color:white;";
+  wordToDict.style.cssText = "background-color:green;color:white;";
   
   var inf = document.getElementById("inf");
   inf.innerHTML = "正在听写：";
   
   var ttsText = document.getElementById("ttsText");
   
-  ttsText.style="border:0;border-bottom:2px;border-bottom-style:solid;border-bottom-color:black;text-align:center;";
+  ttsText.style.cssText = "display:inline;border:0;border-bottom:2px;border-bottom-style:solid;border-bottom-color:black;text-align:center;";
 
   var jsonstr = getDictationContentJSON();	
   
@@ -172,8 +172,8 @@ function stopDictation()
 	
     var wordToDict = document.getElementById("wordToDict");
   
-    wordToDict.style= "background-color:#0033FF;color:white;";
-  
+    wordToDict.style.cssText = "background-color:#0033FF;color:white;";
+	
     var inf = document.getElementById("inf");
     inf.innerHTML = "欢迎使用听写助手";
   
@@ -181,7 +181,7 @@ function stopDictation()
 	
 	ttsText.value = "";
   
-    ttsText.style="display:none;";
+    ttsText.style.cssText="display:none;";
 	
     var dictationBtn = document.getElementById("dictationBtn");
     var stopDictationBtn = document.getElementById("stopDictationBtn");
@@ -190,16 +190,20 @@ function stopDictation()
     stopDictationBtn.disabled = true; 
   
 }
-		
+
+
+
 function doTTS()
 {
 
   var ttsDiv = document.getElementById('bdtts_div_id');
   var ttsAudio = document.getElementById('tts_autio_id');
   var ttsText = document.getElementById('ttsText').value;
+  
+//  alert(ttsText);
 			
   ttsDiv.removeChild(ttsAudio);
-  var au1 = '<audio id="tts_autio_id" autoplay="autoplay" />';
+  var au1 = '<audio id="tts_autio_id" autoplay="autoplay" preload="auto" />';
   var sss = '<source id="tts_source_id" src="http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&text='+ttsText+'" type="audio/mpeg" />';
   var eee = '<embed id="tts_embed_id" height="0" width="0" src="" />';
   var au2 = '</audio>';
@@ -208,7 +212,10 @@ function doTTS()
   ttsAudio = document.getElementById('tts_autio_id');
 			
   ttsAudio.play();
+  
 }
+
+
 </script>
 </head>
 
@@ -219,7 +226,7 @@ function doTTS()
 <div id="wordToDict" style="background-color:#0033FF;color:white;"><span id="inf">欢迎使用听写助手</span><input style="display:none;" type="text" id="ttsText" value="" /></div>
 <hr style="border-color:#0033FF" />
 <div id="bdtts_div_id">	
-<audio id="tts_autio_id" autoplay="autoplay" />
+<audio id="tts_autio_id" autoplay="autoplay" preload="auto" />
 <source id="tts_source_id" src="http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&text=你好,欢迎使用听写助手" type="audio/mpeg" />
 <embed id="tts_embed_id" height="0" width="0" src="" />
 </audio>	
