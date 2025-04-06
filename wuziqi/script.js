@@ -4,7 +4,7 @@ const statusDisplay = document.querySelector('.status');
 
 // 游戏设置
 const BOARD_SIZE = 15;
-const CELL_SIZE = 30;
+const CELL_SIZE = 40;
 const PIECE_RADIUS = CELL_SIZE / 2 - 2;
 
 // 游戏状态
@@ -22,7 +22,7 @@ function initBoard() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
     ctx.strokeStyle = '#000';
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 2;
     
     // 绘制网格线
     for (let i = 0; i < BOARD_SIZE; i++) {
@@ -165,8 +165,81 @@ function resetGame() {
     initBoard();
 }
 
+// 添加触摸事件处理
+function handleTouch(e) {
+    e.preventDefault();
+    const touch = e.touches[0] || e.changedTouches[0];
+    const rect = canvas.getBoundingClientRect();
+    
+    // 计算触摸位置相对于canvas的坐标
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
+    
+    // 转换为棋盘坐标
+    const boardX = Math.floor(x / CELL_SIZE);
+    const boardY = Math.floor(y / CELL_SIZE);
+    
+    // 确保坐标在棋盘范围内
+    if (boardX >= 0 && boardX < BOARD_SIZE && boardY >= 0 && boardY < BOARD_SIZE) {
+        handleClick(boardX, boardY);
+    }
+}
+
 // 初始化游戏
-canvas.addEventListener('click', handleClick);
+function initBoard() {
+    // 清除之前的事件监听器
+    canvas.removeEventListener('click', handleClick);
+    canvas.removeEventListener('touchstart', handleTouch);
+    
+    // 添加新的事件监听器
+    canvas.addEventListener('click', handleClick);
+    canvas.addEventListener('touchstart', handleTouch);
+    
+    // 绘制棋盘
+    canvas.width = BOARD_SIZE * CELL_SIZE;
+    canvas.height = BOARD_SIZE * CELL_SIZE;
+    
+    ctx.fillStyle = '#e8c887';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 2;
+    
+    // 绘制网格线
+    for (let i = 0; i < BOARD_SIZE; i++) {
+        // 横线
+        ctx.beginPath();
+        ctx.moveTo(CELL_SIZE / 2, i * CELL_SIZE + CELL_SIZE / 2);
+        ctx.lineTo(canvas.width - CELL_SIZE / 2, i * CELL_SIZE + CELL_SIZE / 2);
+        ctx.stroke();
+        
+        // 竖线
+        ctx.beginPath();
+        ctx.moveTo(i * CELL_SIZE + CELL_SIZE / 2, CELL_SIZE / 2);
+        ctx.lineTo(i * CELL_SIZE + CELL_SIZE / 2, canvas.height - CELL_SIZE / 2);
+        ctx.stroke();
+    }
+    
+    // 绘制五个星位
+    const starPoints = [3, 7, 11];
+    ctx.fillStyle = '#000';
+    starPoints.forEach(x => {
+        starPoints.forEach(y => {
+            if (!(x === 7 && y === 7)) {
+                ctx.beginPath();
+                ctx.arc(x * CELL_SIZE + CELL_SIZE / 2, y * CELL_SIZE + CELL_SIZE / 2, 3, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        });
+    });
+    
+    // 中心点
+    ctx.beginPath();
+    ctx.arc(7 * CELL_SIZE + CELL_SIZE / 2, 7 * CELL_SIZE + CELL_SIZE / 2, 4, 0, Math.PI * 2);
+    ctx.fill();
+}
+
+// 初始化游戏
 initBoard();
 
 // 添加重置按钮
