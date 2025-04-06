@@ -81,13 +81,29 @@
         .restart-btn:hover {
             background-color: #45a049;
         }
+        
+        .undo-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .undo-btn:hover {
+            background-color: #0b7dda;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="board" id="board"></div>
         <div class="status" id="status">黑方回合</div>
-        <button class="restart-btn" id="restart">重新开始</button>
+        <button class="undo-btn" id="undo">悔棋</button>
+        <button class="restart-btn" id="restart">重新开始</button>        
     </div>
 
     <script>
@@ -127,6 +143,9 @@
             const piece = document.createElement('div');
             piece.classList.add('piece', currentPlayer);
             e.target.appendChild(piece);
+            
+            // 记录落子历史
+            moveHistory.push({row, col});
             
             // 检查胜负
             if (checkWin(row, col)) {
@@ -210,6 +229,32 @@
         
         // 添加重新开始按钮事件监听
         document.getElementById('restart').addEventListener('click', resetGame);
+        
+        // 添加悔棋按钮事件监听
+        document.getElementById('undo').addEventListener('click', undoMove);
+        
+        // 记录落子历史
+        const moveHistory = [];
+        
+        // 悔棋功能
+        function undoMove() {
+            if (!gameActive || moveHistory.length === 0) return;
+            
+            const lastMove = moveHistory.pop();
+            const {row, col} = lastMove;
+            
+            // 清除棋盘状态
+            boardState[row][col] = null;
+            
+            // 清除DOM中的棋子
+            const index = row * boardSize + col;
+            const cell = document.querySelector(`.cell[data-index="${index}"]`);
+            cell.innerHTML = '';
+            
+            // 切换回上一个玩家
+            currentPlayer = currentPlayer === 'black' ? 'white' : 'black';
+            statusDisplay.textContent = `${currentPlayer === 'black' ? '黑方' : '白方'}回合`;
+        }
     </script>
 </body>
 </html>
