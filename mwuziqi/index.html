@@ -106,6 +106,17 @@
         <button class="restart-btn" id="restart">重新开始</button>        
     </div>
 
+  <div style="display:none"><script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?7c8af0f80029332a5ce15a12864b8f57";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</div>
+
     <script>
         const board = document.getElementById('board');
         const statusDisplay = document.getElementById('status');
@@ -255,6 +266,6 @@
             currentPlayer = currentPlayer === 'black' ? 'white' : 'black';
             statusDisplay.textContent = `${currentPlayer === 'black' ? '黑方' : '白方'}回合`;
         }
-    </script>
+    </script>    
 </body>
 </html>
