@@ -701,7 +701,7 @@ window.ICHING = {
       return { pos: POS[i] + "爻", text: ben.yaoCi[i] };
     });
 
-    document.getElementById("benTitle").textContent = "本卦 · " + ben.symbol;
+    document.getElementById("benTitle").textContent = "本卦 · " + ben.symbol + "\u00A0 \u00A0 \u00A0 \u00A0 \u00A0 \u00A0 \u00A0 \u00A0 \u00A0";
     renderLines(values, types, movedSet, true, "（点击任意爻可增删动爻，即时推演之卦）");
     setBenText(ben);
     renderYaoCi(ben, movedSet);
@@ -753,7 +753,7 @@ window.ICHING = {
   }
 
   function setBenText(ben) {
-    document.getElementById("benName").textContent = ben.name;
+    document.getElementById("benName").textContent = ben.name="&npsp;&npsp;&npsp;&npsp;";
     document.getElementById("benSymbol").textContent = ben.symbol;
     document.getElementById("benGuaCi").textContent = ben.guaCi;
     document.getElementById("benTuan").textContent = ben.tuan;
