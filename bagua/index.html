@@ -99,7 +99,7 @@
   <div class="gua-box">
     <div class="gua-box-title" id="benTitle">本卦</div>
     <div class="yao-list" id="yaoList"></div>
-    <div class="yao-tip">（点击任意爻可增删动爻，即时推演之卦）&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+    <div class="yao-tip">（点击任意爻可增删动爻，即时推演之卦）</div>
   </div>
 
   <div class="card">
@@ -134,8 +134,8 @@
     <div  id="bianYaoList"></div>
   </div>
 
-  <!-- <div class="footer">老阴(六)、老阳(九)为变爻 · 少阳(七)、少阴(八)为静爻<br /></div> -->
-<div class="footer"> &copy; AILabs </div>
+<!--  <div class="footer">老阴(六)、老阳(九)为变爻 · 少阳(七)、少阴(八)为静爻<br /></div>-->
+<div class="footer"> &copy; AIRLabs </div>
  <script>
 var _hmt = _hmt || [];
 (function() {
@@ -701,7 +701,7 @@ window.ICHING = {
       return { pos: POS[i] + "爻", text: ben.yaoCi[i] };
     });
 
-    document.getElementById("benTitle").textContent = "本卦 · " + ben.symbol + "\u00A0 \u00A0\u00A0 \u00A0";
+    document.getElementById("benTitle").textContent = "本卦 · " + ben.symbol ;
     renderLines(values, types, movedSet, true, "（点击任意爻可增删动爻，即时推演之卦）");
     setBenText(ben);
     renderYaoCi(ben, movedSet);
@@ -737,12 +737,12 @@ window.ICHING = {
       if (!clickable) cls += " static";
       row.className = cls;
       var tag = types
-        ? (TYPE_NAME[types[i]] + (movedSet[i] ? " · " : ""))
+        ? (TYPE_NAME[types[i]] + (movedSet[i] ? "" : ""))
         : (values[i] ? "阳" : "阴");
       row.innerHTML =
         '<div class="yao-inner"><div class="yao-line"></div>' +
         (values[i] ? "" : '<div class="yao-line"></div>') +
-        '</div><div class="yao-tag">' + tag + '</div>';
+        '</div>';
       if (clickable) {
         (function (idx) {
           row.addEventListener("click", function () { onYaoTap(idx); });
