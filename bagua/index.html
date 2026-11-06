@@ -53,7 +53,7 @@
   .yang .yao-line { width:150px; }
   .yin .yao-line { width:64px; }
   .yao-row.moved .yao-line { background:linear-gradient(90deg,#ff9a5a,#ffc08a); box-shadow:0 0 8px rgba(255,140,80,.6); }
-  .yao-tag { width:96px; font-size:12px; color:#9c8350; }
+  .yao-tag { width:20px; font-size:12px; color:#9c8350; magrin:0;padding:0}
   .yao-row.moved .yao-tag { color:#ff9a5a; font-weight:600; }
   .yao-tip { text-align:center; font-size:11px; color:#8d744a; margin-top:10px; }
 
@@ -99,7 +99,7 @@
   <div class="gua-box">
     <div class="gua-box-title" id="benTitle">本卦</div>
     <div class="yao-list" id="yaoList"></div>
-    <div class="yao-tip">（点击任意爻可增删动爻，即时推演之卦）</div>
+    <div class="yao-tip">（点击任意爻可增删动爻，即时推演之卦）&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
   </div>
 
   <div class="card">
@@ -134,7 +134,7 @@
     <div  id="bianYaoList"></div>
   </div>
 
-  <!--<div class="footer">老阴(六)、老阳(九)为变爻 · 少阳(七)、少阴(八)为静爻<br /></div>-->
+  <!-- <div class="footer">老阴(六)、老阳(九)为变爻 · 少阳(七)、少阴(八)为静爻<br /></div> -->
 <div class="footer"> &copy; AILabs </div>
  <script>
 var _hmt = _hmt || [];
@@ -619,7 +619,7 @@ window.ICHING = {
     CTL[LTC[k]] = k.split("").reverse().map(Number); // 反转 → [初,中,上]
   });
 
-  // 八卦 code → 规范单字卦名（与 TRIGRAM 互逆，专用于再观一象后回填输入框）
+  // 八卦 code → 规范单字卦名（与 TRIGRAM 互逆，专用于起卦后回填输入框）
   var CODE_NAME = { 0: "坤", 1: "艮", 2: "坎", 3: "巽", 4: "震", 5: "离", 6: "兑", 7: "乾" };
 
   // 卦名 / 自然象征 → 八卦 code
@@ -647,7 +647,7 @@ window.ICHING = {
     return -1;
   }
 
-  // ---------- 再观一象 ----------
+  // ---------- 随机起卦 ----------
   function cast() {
     var errEl = document.getElementById("queryErr");
     if (errEl) errEl.textContent = "";
@@ -679,7 +679,7 @@ window.ICHING = {
     var g = I.yaoToGua(values);
     var ben = I.findHexagram(g.upper, g.lower);
 
-    // 仅再观一象（types 非空）时，把本卦上下经卦名回填输入框便于二次查询；
+    // 仅随机起卦（types 非空）时，把本卦上下经卦名回填输入框便于二次查询；
     // 查询模式（types 为 null）保留用户已输入的上下卦，不被覆盖
     if (types) {
       document.getElementById("upperInput").value = CODE_NAME[g.upper];
@@ -701,7 +701,7 @@ window.ICHING = {
       return { pos: POS[i] + "爻", text: ben.yaoCi[i] };
     });
 
-    document.getElementById("benTitle").textContent = "本卦 · " + ben.symbol + "\u00A0 \u00A0 \u00A0 \u00A0 \u00A0 \u00A0 \u00A0 \u00A0 \u00A0";
+    document.getElementById("benTitle").textContent = "本卦 · " + ben.symbol + "\u00A0 \u00A0\u00A0 \u00A0";
     renderLines(values, types, movedSet, true, "（点击任意爻可增删动爻，即时推演之卦）");
     setBenText(ben);
     renderYaoCi(ben, movedSet);
@@ -737,7 +737,7 @@ window.ICHING = {
       if (!clickable) cls += " static";
       row.className = cls;
       var tag = types
-        ? (TYPE_NAME[types[i]] + (movedSet[i] ? " · 动" : ""))
+        ? (TYPE_NAME[types[i]] + (movedSet[i] ? " · " : ""))
         : (values[i] ? "阳" : "阴");
       row.innerHTML =
         '<div class="yao-inner"><div class="yao-line"></div>' +
