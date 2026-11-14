@@ -663,6 +663,12 @@ window.ICHING = {
       if (type === 6 || type === 9) movedSet[i] = true;
     }
     apply(values, types, movedSet);
+
+    const url = new URL(window.location);
+    url.searchParams.delete('share');
+    url.searchParams.delete('us');
+    url.searchParams.delete('ls');
+    window.history.replaceState({}, '', url);
   }
 
   function onYaoTap(idx) {
@@ -705,7 +711,8 @@ window.ICHING = {
     renderLines(values, types, movedSet, true, "（点击任意爻可增删动爻，即时推演之卦）");
     setBenText(ben);
     renderYaoCi(ben, movedSet);
-    setZhi(showZhi, zhi, bianYaoList);
+    setZhi(showZhi, zhi, bianYaoList);     
+
   }
 
   // ---------- 按上卦/下卦查询 ----------
@@ -731,6 +738,7 @@ window.ICHING = {
     url.searchParams.set('us', us);   // 有则覆盖，无则新增
     url.searchParams.set('ls', ls);   // 有则覆盖，无则新增
     window.history.replaceState({}, '', url);
+    document.title = ben.symbol+'-观象玩辞学易经';
   }
     // ---------- 按上卦/下卦查询 ----------
   function query_url(us,ls) {
@@ -751,6 +759,7 @@ window.ICHING = {
     // 查询所得为静态本卦（无四态），交由 apply 统一渲染；
     // 初始无动爻、不显之卦，用户可点击任意爻设动爻即时推演之卦
     apply(CTL[lo].concat(CTL[up]), null, {});
+    document.title = ben.symbol+'-观象玩辞学易经';
   }
 
   // ---------- 渲染 ----------
