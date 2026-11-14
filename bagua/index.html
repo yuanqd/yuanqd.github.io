@@ -677,7 +677,7 @@ window.ICHING = {
     state.values = values; state.types = types; state.movedSet = movedSet; state.mode = "cast";
 
     var g = I.yaoToGua(values);
-    var ben = I.findHexagram(g.upper, g.lower);
+    var ben = I.findHexagram(g.upper, g.lower);    
 
     // 仅随机起卦（types 非空）时，把本卦上下经卦名回填输入框便于二次查询；
     // 查询模式（types 为 null）保留用户已输入的上下卦，不被覆盖
@@ -721,6 +721,32 @@ window.ICHING = {
     var ben = I.findHexagram(up, lo);
     if (!ben) { return; }
     
+
+    // 查询所得为静态本卦（无四态），交由 apply 统一渲染；
+    // 初始无动爻、不显之卦，用户可点击任意爻设动爻即时推演之卦
+    apply(CTL[lo].concat(CTL[up]), null, {});
+
+    const url = new URL(window.location);
+    url.searchParams.set('share', 'true');   // 有则覆盖，无则新增
+    url.searchParams.set('us', us);   // 有则覆盖，无则新增
+    url.searchParams.set('ls', ls);   // 有则覆盖，无则新增
+    window.history.replaceState({}, '', url);
+  }
+    // ---------- 按上卦/下卦查询 ----------
+  function query_url(us,ls) {
+    
+    var up = parseTrigram(us);
+    var lo = parseTrigram(ls);
+
+    if (up < 0 || lo < 0) {
+      return;
+    }
+    var ben = I.findHexagram(up, lo);
+    if (!ben) { return; }
+    
+
+    document.getElementById("upperInput").value = CODE_NAME[up];
+    document.getElementById("lowerInput").value = CODE_NAME[lo];
 
     // 查询所得为静态本卦（无四态），交由 apply 统一渲染；
     // 初始无动爻、不显之卦，用户可点击任意爻设动爻即时推演之卦
@@ -822,7 +848,19 @@ window.ICHING = {
     });
   });
 
-  cast();
+  /*start:检查URL里是否有参数，如没有参数则随机出示一象*/
+  const params = new URLSearchParams(location.search);
+  const isShare = params.get('share');
+  const share_us = params.get('us');
+  const share_ls = params.get('ls');
+  if(isShare=='true')
+  {
+    query_url(share_us,share_ls);
+  }
+  else
+  {
+    cast();
+  }
 })();
 </script>
 </body>
